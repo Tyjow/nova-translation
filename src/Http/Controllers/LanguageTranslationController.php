@@ -21,7 +21,9 @@ class LanguageTranslationController extends Controller
     public function index(Request $request, $language)
     {
         $languages = $this->translation->allLanguages();
-        $groups = $this->translation->getGroupsFor(config('app.locale'))->prepend('single');
+
+        // set collection to array
+        $groups = $this->translation->getGroupsFor(config('app.locale'))->prepend('single')->toArray();
 
         // Looking for choose only specific file into the group
         $groupUsed = ['trad', 'meta'];
