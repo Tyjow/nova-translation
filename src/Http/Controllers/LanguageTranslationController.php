@@ -22,6 +22,11 @@ class LanguageTranslationController extends Controller
     {
         $languages = $this->translation->allLanguages();
         $groups = $this->translation->getGroupsFor(config('app.locale'))->prepend('single');
+
+        // Looking for choose only specific file into the group
+        $groupUsed = ['trad', 'meta'];
+        $groups = new Collection(array_intersect($groupUsed, $groups));
+
         $translations = $this->translation->filterTranslationsFor($language, $request->get('search'));
 
         if ($request->has('group') && $request->get('group')) {
