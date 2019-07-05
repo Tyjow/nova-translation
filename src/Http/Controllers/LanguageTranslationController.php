@@ -31,6 +31,21 @@ class LanguageTranslationController extends Controller
 
         $translations = $this->translation->filterTranslationsFor($language, $request->get('search'));
 
+        // get translations only with specific group
+        $translations = $translations->get('group')->filter(function ($values, $group) use ($groupUsed) {
+            $sortedGroups = [];
+            foreach($groupUsed as $used)
+            {
+                if($group === $used)
+                {
+                    $sortedGroups[] = $group;
+                }
+            }
+            return $sortedGroups;
+        });
+
+        $translations = new Collection(['group' => $translations]);
+
         if ($request->has('group') && $request->get('group')) {
             if ($request->get('group') === 'single') {
                 $translations = $translations->get('single');
